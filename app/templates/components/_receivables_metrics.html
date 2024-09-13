@@ -1,0 +1,46 @@
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h4>Conciliacao de Recebiveis</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Adquirente</th>                            
+                            <th>Operacao</th>                            
+                            <th>Data</th>
+                            <th>Transacoes</th>
+                            <th>Valor Bruto</th>
+                            <th>Valor Taxa</th>
+                            <th>Valor Líquido</th>
+                            <th>(%) Taxa</th> 
+                            <th>TRS Media</th>    
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in concilia_recebiveis_metrics %}
+                        <tr>
+                            <td>{{ item.adquirente }}</td>                            
+                            <td>{{ item.operacao }}</td>                            
+                            <td>{{ item.conciliacao_competencia }}</td>
+                            <td>{{ item.lctos }}</td>
+                            <td>R$ {{ item.valor_bruto|floatformat:2 }}</td>
+                            <td>R$ {{ item.taxa|floatformat:2 }}</td>
+                            <td>R$ {{ item.valor_liquido|floatformat:2 }}</td>
+                            <td>{{ item.percentual_taxa|floatformat:2 }} % </td>
+                            <td>R$ {{ item.transacao_media|floatformat:2 }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="10" class="text-center">Nenhuma apuração encontrada para o período selecionado.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+    
+            </div>
+        </div>
+    </div>    

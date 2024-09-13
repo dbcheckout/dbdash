@@ -1,0 +1,49 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>KPI DELIVERY </h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Atds</th>
+                        <th>Ents</th>
+                        <th>Ped</th>                        
+                        <th>Pro</th>
+                        <th>VND</th>
+                        <th>TCM</th>                        
+                        <th>TM ATD</th>
+                        <th>TM MTG</th>
+                        <th>TM LOJ</th>
+                        <th>TM ENT</th>
+                        <th>TM OPR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in kpi_delivery_metrics %}
+                    <tr>
+                        <td>{{ item.data }}</td>
+                        <td>{{ item.atendentes }}</td>
+                        <td>{{ item.entregadores }}</td>
+                        <td>{{ item.pedidos }}</td>
+                        <td>{{ item.produtos }}</td>
+                        <td>{{ item.vlr_produtos }}</td>                        
+                        <td>{{ item.ticket_medio|floatformat:2 }}</td>                        
+                        <td>{{ item.media_tempo_atendimento }}</td>
+                        <td>{{ item.media_tempo_montagem }}</td>
+                        <td>{{ item.media_tempo_loja }}</td>
+                        <td>{{ item.media_tempo_entrega }}</td>
+                        <td>{{ item.media_tempo_operacao }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="11" class="text-center">Nenhum pedido encontrado para o período selecionado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container mt-4">
+  <h2 class="display-10 mb-4">
+    Produto: {{ pro_cod }} - {{ pro_des }} venda de {{ data_inicio }} a {{ data_fim }}
+  </h2>
+  <div class="row">
+    <!-- Coluna das Informações do Produto -->
+    <div class="col-md-8 d-flex flex-column">
+      <div class="card mb-4 flex-fill">
+        <div class="card-body">
+          <h3 class="card-title">{{ object.title }}</h3>
+          <p>Custo unitário: {{ pro_cus|floatformat:2 }}</p>
+          <p>Aliquota ICMS: {{ pro_aicms|default:"Não disponível"|floatformat:2 }} % | NCM: {{ pro_ncm }} | CFOP: {{ pro_cfop }}</p>
+          <p>Preço cardápio: {{ pro_prc_car|floatformat:2 }}</p>
+          <p>Preço médio: {{ pro_prc_med|floatformat:2 }}</p>
+          <p>Total TCs: {{ pro_tcs|default:"Não disponível"|floatformat:0 }}</p>
+          <p>Média TC: {{ media_vendas|default:"Não disponível"|floatformat:2 }}</p>
+          <p>Qtde vendida: {{ pro_qtd|floatformat:4 }} {{ pro_und }}</p>
+          <p>Valor produto: {{ total_vendas|default:"Não disponível"|floatformat:2 }}</p>
+          <p>Tributos: {{ pro_tri|default:"Não disponível"|floatformat:2 }} | ICMS: {{ pro_icms|default:"Não disponível"|floatformat:2 }} | PIS: {{ pro_pis|default:"Não disponível"|floatformat:2 }} | COFINS: {{ pro_cofins|default:"Não disponível"|floatformat:2 }}</p>
+          <p>Valor líquido: {{ pro_liq|default:"Não disponível"|floatformat:2 }}</p>
+          <p>CMV: {{ pro_cmv|default:"Não disponível"|floatformat:2 }}</p>
+          <p>Margem Bruta: {{ pro_mrg_brt|default:"Não disponível"|floatformat:2 }}</p>
+        </div>
+      </div>
+      <div class="card mb-4 flex-fill">
+        <div class="card-body">
+          <h4 class="mb-4">Participação</h4>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Categoria</th>
+                <th>Quantidade</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td><strong>VENDA TOTAL</strong></td>
+                <td><strong>{{ vnd_pro_tot.participacao_qtd|floatformat:2 }} %</strong></td>
+                <td><strong>{{ vnd_pro_tot.participacao_venda|floatformat:2 }} %</strong></td>
+              </tr>            
+              <tr>
+                <td><strong>VENDA POR GRUPO</strong></td>
+                <td><strong>{{ vnd_pro_gru.participacao_qtd|floatformat:2 }} %</strong></td>
+                <td><strong>{{ vnd_pro_gru.participacao_venda|floatformat:2 }} %</strong></td>
+              </tr>
+              <tr>
+                <td><strong>VENDA POR TIPO</strong></td>
+                <td><strong>{{ vnd_pro_tip.participacao_qtd|floatformat:2 }} %</strong></td>
+                <td><strong>{{ vnd_pro_tip.participacao_venda|floatformat:2 }} %</strong></td>
+              </tr>
+              <tr>
+                <td><strong>VENDA POR TAMANHO</strong></td>
+                <td><strong>{{ vnd_pro_tam.participacao_qtd|floatformat:2 }} %</strong></td>
+                <td><strong>{{ vnd_pro_tam.participacao_venda|floatformat:2 }} %</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coluna dos Gráficos -->
+    <div class="col-md-4 d-flex flex-column">
+      <div class="card mb-4 flex-fill">
+        <div class="card-body">
+          <h4 class="mb-4">Vendas por Origem</h4>
+          <canvas id="pieChartOrigens" width="400" height="180"></canvas>
+        </div>
+      </div>
+      <div class="card mb-4 flex-fill">
+        <div class="card-body">
+          <h4 class="mb-4">Ficha Tecnica</h4>
+          <table class="table table-striped" style="font-size: 0.85em;">
+            <thead>
+                <tr>
+                    <th>Apelido</th>
+                    <th>Consumo</th>
+                    <th>Unidade</th>
+                    <th>Custo</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for receita in receitas %}
+              <tr>
+                  <td>{{ receita.apelido }}</td>
+                  <td>{{ receita.consumo|floatformat:2 }}</td>
+                  <td>{{ receita.unidade }}</td>
+                  <td>{{ receita.custo_calculado|floatformat:2 }}</td>
+              </tr>
+              {% endfor %}
+              <tr>
+                  <td colspan="4">
+                      <strong>Consumo de R$ {{ total_consumo|floatformat:2 }} para {{ pro_qtd|floatformat:2 }} {{ pro_und }}</strong>
+                  </td>
+              </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h4 class="mb-4">Movimentação de Vendas - Últimos 12 Meses</h4>
+      <canvas id="myChart" width="400" height="150"></canvas>
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <a href="{% url 'am_produto_list' %}" class="btn btn-secondary">Voltar para a Lista de Produtos</a>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Gráfico de Linha (Movimentação de Vendas)
+  var mesvnd = JSON.parse('{{ grafico_meses|safe }}');
+  var qtdvnd = JSON.parse('{{ grafico_quantidades|safe }}');
+  var vlrvnd = JSON.parse('{{ grafico_valores|safe }}');
+
+  var ctxLine = document.getElementById('myChart').getContext('2d');
+  new Chart(ctxLine, {
+    type: 'line',
+    data: {
+      labels: mesvnd,
+      datasets: [
+        {
+          label: 'Quantidade Vendida',
+          data: qtdvnd,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+          fill: false,
+          yAxisID: 'y-axis-1'
+        },
+        {
+          label: 'Valor de Venda',
+          data: vlrvnd,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1,
+          fill: false,
+          yAxisID: 'y-axis-2'
+        }
+      ]
+    },
+    options: {
+      scales: {
+        yAxes: [
+          {
+            id: 'y-axis-1',
+            type: 'linear',
+            position: 'left',
+            ticks: {
+              beginAtZero: true,
+              precision: 0  // Quantidade inteira
+            }
+          },
+          {
+            id: 'y-axis-2',
+            type: 'linear',
+            position: 'right',
+            ticks: {
+              beginAtZero: true,
+              precision: 2  // Valor com 2 casas decimais
+            }
+          }
+        ]
+      }
+    }
+  });
+
+  // Gráfico de Pizza (Valor de Vendas por Origem)
+  var origens = JSON.parse('{{ grafico_origens|safe }}');
+  var valoresOrigens = JSON.parse('{{ grafico_valores_origem|safe }}');
+
+  var ctxPie = document.getElementById('pieChartOrigens').getContext('2d');
+  new Chart(ctxPie, {
+    type: 'pie',
+    data: {
+      labels: origens,
+      datasets: [{
+        label: 'Valor de Vendas por Origem',
+        data: valoresOrigens,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              let label = context.label || '';
+              let value = context.raw || 0;
+              return `${label}: ${value.toFixed(2)}`;
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
+
+
+
+
+{% endblock %}

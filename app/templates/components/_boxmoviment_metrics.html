@@ -1,0 +1,48 @@
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Movimento de caixa</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Data</th>
+                        <th>Origem</th>
+                        <th>Saldo Inicial</th>
+                        <th>Abertura</th>
+                        <th>Aberto por</th>
+                        <th>Saldo Final</th>
+                        <th>Encerrado por</th>
+                        <th>Fechamento</th>
+                        <th>Situação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in movimento_caixa_metrics %}
+                    <tr>
+                        <td>{{ item.numero }}</td>
+                        <td>{{ item.data|date:"d/m/Y" }}</td>
+                        <td>{{ item.origem }}</td>
+                        <td>R$ {{ item.saldo_inicial|floatformat:2 }}</td>
+                        <td>{{ item.abertura|date:"d/m/Y H:i" }}</td>
+                        <td>{{ item.autenticador_abertura }}</td>
+                        <td>R$ {{ item.saldo_final|floatformat:2 }}</td>
+                        <td>{{ item.autenticador_encerramento }}</td>
+                        <td>{{ item.fechamento|date:"d/m/Y H:i" }}</td>
+                        <td>{{ item.situacao }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center">Nenhuma apuração encontrada para o período selecionado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</div>    

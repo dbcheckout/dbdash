@@ -1,0 +1,44 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Apuracao do Caixa</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Forma de Pagamento</th>
+                        <th>Descrição</th>
+                        <th>Lctos</th>
+                        <th>Vlr Registrado</th>
+                        <th>Vlr Apurado</th>
+                        <th>Quebra</th>
+                </thead>
+                <tbody>
+                    {% for item in apuracao_caixa_metrics.resultados %}
+                    <tr>
+                        <td>{{ item.forma_pgto }}</td>
+                        <td>{{ item.forma_pgto_descricao }}</td>
+                        <td>{{ item.docs }}</td>
+                        <td>{{ item.venda }}</td>
+                        <td>{{ item.apuracao }}</td>
+                        <td>{{ item.quebra }}</td>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">Nenhuma Apuracao encontrada para o período selecionado.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            
+            <div class="total-geral">
+                <div class="row">
+                    <div class="col-md-2"><strong>Total Venda:</strong> {{ apuracao_caixa_metrics.total_venda|floatformat:2 }}</div>
+                    <div class="col-md-2"><strong>Total Apuração:</strong> {{ apuracao_caixa_metrics.total_apuracao|floatformat:2 }}</div>
+                    <div class="col-md-2"><strong>Total Quebra:</strong> {{ apuracao_caixa_metrics.total_quebra|floatformat:2 }}</div>
+                    <div class="col-md-2"><strong>Saldo da Quebra:</strong> {{ apuracao_caixa_metrics.saldo_quebra|floatformat:2 }}</div>
+                </div>
+            </div>       
+        </div>
+    </div>
+</div>

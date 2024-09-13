@@ -1,0 +1,49 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Escrituracao Fiscal / PRODUTO</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Produto</th>                        
+                        <th>CFOP</th>
+                        <th>NCM</th>             
+                        <th>CST</th>                                                           
+                        <th>Qtd Total</th>
+                        <th>Venda Total</th>
+                        <th>ICMS Base Reduzida</th>
+                        <th>ICMS Base Substituída</th>
+                        <th>ICMS Base</th>
+                        <th>Aliquota</th>                        
+                        <th>ICMS Valor</th>
+                        <th>Apuração Simples</th>
+                </thead>
+                <tbody>
+                    {% for item in apuracao_icms_metrics %}
+                    <tr>
+                        <td>{{ item.produto_des }}</td>                        
+                        <td>{{ item.cfop }}</td>
+                        <td>{{ item.ncm }}</td>
+                        <td>{{ item.icms_cst }}</td>                                                
+                        <td>{{ item.qtd_total|floatformat:0 }}</td>
+                        <td>{{ item.venda_total|floatformat:2 }}</td>
+                        <td>{{ item.icms_base_red_total|floatformat:2 }}</td>
+                        <td>{{ item.icms_base_sub_total|floatformat:2 }}</td>
+                        <td>{{ item.icms_base_total|floatformat:2 }}</td>
+                        <td>{{ item.icms_aliquota|floatformat:2 }}</td>
+                        <td>{{ item.icms_valor_total|floatformat:2 }}</td>
+                        <td>{{ item.apura_simples_total|floatformat:2 }}</td>
+
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">Nenhuma Apuracao encontrada para o período selecionado.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+     
+        </div>
+    </div>
+</div>

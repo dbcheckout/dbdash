@@ -1,0 +1,35 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>FLUXO DE CONSUMO DE INSUMOS</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Código do Ingrediente</th>
+                        <th>Descrição</th>
+                        <th>Custo Real</th>                        
+                        <th>Consumo</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in dem_fluxoproduto_metrics %}
+                    <tr>
+                        <td>{{ item.produto_codigo }}</td>
+                        <td>{{ item.ingrediente_codigo }}</td>
+                        <td>{{ item.ingrediente_qtd|floatformat:2 }}</td>
+                        <td>{{ item.custo|floatformat:4 }}</td>
+                        <td>{{ item.custo|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">Nenhum dado encontrado para o período selecionado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Formas de Pagamentos</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Forma de Pagamento</th>
+                        <th>Qtde Lctos</th>
+                        <th>Total Pago</th>
+                        <th>Total Troco</th>
+                        <th>Valor Custo</th>
+                        <th>Med Pgto</th>
+                        <th>Med Dia</th>
+                        <th>Participação  (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pagamento in venda_pgtos_metrics %}
+                    <tr>
+                        <td>{{ pagamento.forma_nome }}</td>
+                        <td>{{ pagamento.total_lctos }}</td>
+                        <td>{{ pagamento.total_pago|floatformat:2 }}</td>
+                        <td>{{ pagamento.total_troco|floatformat:2 }}</td>
+                        <td>{{ pagamento.valor_custo|floatformat:2 }}</td>
+                        <td>{{ pagamento.pgto_por_pedido|floatformat:2 }}</td>
+                        <td>{{ pagamento.pgto_por_dia|floatformat:2 }}</td>
+                        <td>{{ pagamento.participacao_vnd|floatformat:2 }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">Nenhuma forma de pagamento encontrada para o período selecionado.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

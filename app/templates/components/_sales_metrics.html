@@ -1,0 +1,90 @@
+<div class="card mt-4">
+  <div class="card-body">
+    <div class="row">
+      <h2 class="display-10 mb-4">
+        Movimento venda de {{ data_inicial }} a {{ data_final }}
+      </h2>      
+    </div>
+  </div>
+</div>
+
+<div class="card mt-4">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card bg-primary">
+          <div class="card-body">
+            <h5 class="card-title">TCs</h5>
+            <p class="card-text text-white font-weight-bold display-6">{{ pedidos_metrics.dbc_tcs }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card bg-primary">
+          <div class="card-body">
+            <h5 class="card-title">Total</h5>
+            <p class="card-text text-white font-weight-bold display-6"> {{ pedidos_metrics.dbc_vlr_ped }}</p>         
+           </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-primary">
+          <div class="card-body">
+            <h5 class="card-title">Taxas</h5>
+            <p class="card-text text-white font-weight-bold display-6"> {{ pedidos_metrics.dbc_vlr_tax}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-primary">
+          <div class="card-body">
+            <h5 class="card-title">Venda</h5>
+            <p class="card-text text-white font-weight-bold display-6"> {{ pedidos_metrics.dbc_vlr_pro }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-4">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card bg-primary">
+          <div class="card-body">
+            <h5 class="card-title">TCM</h5>
+            <p class="card-text text-white font-weight-bold display-6"> {{ pedidos_metrics.dbc_tcm }}</p>         
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card bg-primary">
+          <div class="card-body">
+            <h5 class="card-title">TX SERVICO</h5>
+            <p class="card-text text-white font-weight-bold display-6"> {{ pedidos_metrics.dbc_vlr_ts }}</p>         
+           </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-primary">
+          <div class="card-body">
+            <h5 class="card-title">TX ENTREGA</h5>
+            <p class="card-text text-white font-weight-bold display-6"> {{ pedidos_metrics.dbc_vlr_te }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-primary">
+          <div class="card-body">
+            <h5 class="card-title">CMV</h5>
+            <p class="card-text text-white font-weight-bold display-6"> {{ pedidos_metrics.dbc_vlr_cus }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

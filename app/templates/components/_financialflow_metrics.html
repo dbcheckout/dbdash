@@ -1,0 +1,56 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Fluxo Financeiro</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Histórico</th>
+                        <th>Fluxo</th>                        
+                        <th>Lançamentos</th>
+                        <th>Valor Total</th>
+                        <th>Menor Lançamento</th>
+                        <th>Maior Lançamento</th>
+                        <th>Média de Lançamento</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in fluxo_financeiro_metrics.dados_fluxo %}
+                    <tr>
+                        <td>{{ item.fluxofinanceiro__historico }}</td>
+                        <td>{{ item.fluxofinanceiro__fluxo }}</td>                        
+                        <td>{{ item.lctos }}</td>
+                        <td>R$ {{ item.valor_total|floatformat:2 }}</td>
+                        <td>R$ {{ item.menor_lcto|floatformat:2 }}</td>
+                        <td>R$ {{ item.maior_lcto|floatformat:2 }}</td>
+                        <td>R$ {{ item.media_lcto|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center">Nenhuma apuração encontrada para o período selecionado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Total Creditos</th>
+                        <th>Total Debitos</th>                        
+                        <th>Saldo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <td class="text-right">R$ {{ fluxo_financeiro_metrics.total_credito|floatformat:2 }}</td>
+                    <td class="text-right">R$ {{ fluxo_financeiro_metrics.total_debito|floatformat:2 }}</td>
+                    <td class="text-right">R$ {{ fluxo_financeiro_metrics.saldo|floatformat:2 }}</td>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

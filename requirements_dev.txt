@@ -1,0 +1,67 @@
+flake8==7.0.0
+
+
+from django.db import models
+
+
+class Pedidos(models.Model):
+    loja = models.IntegerField()
+
+
+from django.db import models
+
+
+class Pedidos(models.Model):
+    loja = models.IntegerField()
+
+
+    def __str__(self):
+        return self.name
+
+
+
+    loja = models.IntegerField()
+    data = models.DateTimeField()
+    origem = models.CharField(max_length=20)
+    qtd_pessoas = models.IntegerField()
+    qtd_itens = models.IntegerField()
+    qtd_produtos = models.FloatField()
+    vlr_produtos = models.FloatField()
+    vlr_desconto = models.FloatField()
+    vlr_acrescimos = models.FloatField()
+    sub_total = models.FloatField()
+    taxa_servicos = models.FloatField()
+    taxa_entrega = models.FloatField()
+    vlr_pedido = models.FloatField()
+    vlr_liquido = models.FloatField()
+    forma_pagamento = models.IntegerField()
+    vlr_pago = models.FloatField()
+    vlr_recebido = models.FloatField()
+    vlr_troco = models.FloatField()
+    vlr_ecf = models.FloatField()
+    custo = models.FloatField()
+    data_registro = models.DateTimeField()
+    fechado = models.CharField()
+    cancelado = models.CharField()
+    estagio = models.CharField()    
+    status = models.CharField()
+    turno = models.IntegerField()
+    hora_entrega = models.DateTimeField()
+    hora_despacho = models.DateTimeField()
+    hora_captura = models.DateTimeField()
+    hora_producao = models.DateTimeField()
+    hora_expedicao = models.DateTimeField()
+    hora_baixa = models.DateTimeField()
+    entregador = models.IntegerField()
+    entregador_nome = models.CharField()
+    apura_icms = models.FloatField()
+    apura_pis = models.FloatField()
+    apura_cofins = models.FloatField()
+    apura_ipi = models.FloatField()
+    nfce_status_cod = models.IntegerField()
+    imposto_base_tributada = models.FloatField()
+    imposto_base_st = models.FloatField()
+    imposto_base_reducao = models.FloatField()
+    apura_simples = models.FloatField()
+    imposto_base_substituida = models.FloatField()
+

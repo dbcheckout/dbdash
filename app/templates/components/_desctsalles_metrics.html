@@ -1,0 +1,45 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Resumo de Descontos</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>                        
+                        <th>Descrição</th>
+                        <th>Tipo de Desconto</th>
+                        <th>Itens</th>
+                        <th>Valor</th>
+                        <th>Menor Descto</th>                        
+                        <th>Maior Descto</th>                        
+                        <th>TRS Media</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in venda_desconto_metrics %}
+                    <tr>                        
+                        <td>{{ item.descricao }}</td>
+                        <td>
+                            {% if item.codigo_desconto %}
+                                Auditado
+                            {% else %}
+                                Direto
+                            {% endif %}
+                        </td>
+                        <td>{{ item.qtd }}</td>
+                        <td>{{ item.valor|floatformat:2 }}</td>
+                        <td>{{ item.menord|floatformat:2 }}</td>                        
+                        <td>{{ item.maiord|floatformat:2 }}</td>                        
+                        <td>{{ item.media|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">Nenhum dado encontrado para o período selecionado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

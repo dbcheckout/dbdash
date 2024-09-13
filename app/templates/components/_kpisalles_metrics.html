@@ -1,0 +1,52 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Fluxo Diário de Vendas</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Dia da Semana</th>
+
+                        <th>Qtd. Pedidos</th> 
+                        <th>Total do Dia</th> 
+                        <th>TCM Diário</th>                                                                              
+
+                        <th>Qtd. Pedidos Almoço</th>
+                        <th>Total de Almoço</th>
+                        <th>TCM Almoço</th>
+
+                        <th>Qtd. Pedidos Jantar</th>                        
+                        <th>Total de Jantar</th>
+                        <th>TCM Jantar</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in venda_diaria_metrics %}
+                    <tr>
+                        <td>{{ item.dia_da_semana }}</td>
+                        <td>{{ item.quantidade_pedidos }}</td>
+                        <td>{{ item.total_dia|floatformat:2 }}</td>                                                                      
+                        <td>{{ item.media_dia|floatformat:2 }}</td>
+
+                        <td>{{ item.quantidade_pedidos_almoço }}</td>
+                        <td>{{ item.total_almoço|floatformat:2 }}</td>
+                        <td>{{ item.media_almoço|floatformat:2 }}</td>
+
+                        <td>{{ item.quantidade_pedidos_jantar }}</td>                                                
+                        <td>{{ item.total_jantar|floatformat:2 }}</td>
+                        <td>{{ item.media_jantar|floatformat:2 }}</td>
+
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center">Nenhuma apuração encontrada para o período selecionado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

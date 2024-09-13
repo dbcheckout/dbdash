@@ -1,0 +1,82 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Filtro de Dados</h4>
+        </div>
+        <div class="card-body">
+            <form method="get" action="." class="form">
+                <div class="form-row">
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="intervalo" class="form-label">{{ form.intervalo.label }}</label>
+                        {{ form.intervalo }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="data_inicial" class="form-label">{{ form.data_inicial.label }}</label>
+                        {{ form.data_inicial }}
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="data_final" class="form-label">{{ form.data_final.label }}</label>
+                        {{ form.data_final }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Filtrar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const intervaloSelect = document.getElementById('id_intervalo'); // ID do campo de intervalo
+    const dataInicialInput = document.getElementById('id_data_inicial'); // ID do campo de data inicial
+    const dataFinalInput = document.getElementById('id_data_final'); // ID do campo de data final
+
+    function atualizarDatas() {
+        const intervalo = intervaloSelect.value;
+        const hoje = new Date();
+        let dataInicial, dataFinal;
+
+        switch (intervalo) {
+            case 'mes_corrente':
+                dataInicial = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+                dataFinal = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                break;
+            case 'ultimos_7_dias':
+                dataInicial = new Date(hoje - 7 * 24 * 60 * 60 * 1000);
+                dataFinal = hoje;
+                break;
+            case 'ultimos_15_dias':
+                dataInicial = new Date(hoje - 15 * 24 * 60 * 60 * 1000);
+                dataFinal = hoje;
+                break;
+            case 'ano_todo':
+                dataInicial = new Date(hoje.getFullYear(), 0, 1);
+                dataFinal = new Date(hoje.getFullYear(), 11, 31);
+                break;
+            default:
+                return; // Se não houver intervalo selecionado, não faz nada
+        }
+
+        dataInicialInput.value = formatarData(dataInicial);
+        dataFinalInput.value = formatarData(dataFinal);
+    }
+
+    function formatarData(data) {
+        const ano = data.getFullYear();
+        const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+        const dia = data.getDate().toString().padStart(2, '0');
+        return `${ano}-${mes}-${dia}`;
+    }
+
+    intervaloSelect.addEventListener('change', atualizarDatas);
+
+    // Inicializa os campos com o intervalo selecionado ao carregar a página
+    atualizarDatas();
+});
+</script>

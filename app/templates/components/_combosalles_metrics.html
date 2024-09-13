@@ -1,0 +1,33 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Venda de Combos</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Descrição</th>
+                        <th>Quantidade</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in combo_summary %}
+                    <tr>
+                        <td>{{ item.NUMERO }}</td>
+                        <td>{{ item.DESCRICAO }}</td>
+                        <td>{{ item.QTD }}</td>
+                        <td>{{ item.VALOR|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">Nenhum dado encontrado para o período selecionado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

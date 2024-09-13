@@ -1,0 +1,44 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Vendas por Grupo</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Grupo</th>
+                        <th>Itens</th>
+                        <th>Qtde </th>
+                        <th>Valor</th>
+                        <th>Custo</th>
+                        <th>Margem (%)</th>
+                        <th>Preço Médio</th>
+                        <th>Itens por Pedido</th>
+                        <th>Itens por Dia</th>                        
+                        <th>Participação  (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resultado in venda_grupo_metrics %}
+                    <tr>
+                        <td>{{ resultado.grupo_nome }}</td>
+                        <td>{{ resultado.total_pedidos }}</td>
+                        <td>{{ resultado.quantidade_total|floatformat:2 }}</td>
+                        <td>{{ resultado.valor_bruto|floatformat:2 }}</td>
+                        <td>{{ resultado.valor_custo|floatformat:2 }}</td>
+                        <td>{{ resultado.margem|floatformat:2 }}</td>
+                        <td>{{ resultado.preco_medio|floatformat:2 }}</td>
+                        <td>{{ resultado.itens_por_pedido|floatformat:2 }}</td>
+                        <td>{{ resultado.itens_por_dia|floatformat:2 }}</td>
+                        <td>{{ resultado.participacao_vnd|floatformat:2 }}</td>
+                    {% empty %}
+                    <tr>
+                        <td colspan="11">Nenhum dado disponível.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

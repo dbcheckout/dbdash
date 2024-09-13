@@ -1,0 +1,43 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Venda DEL Por Entregador e media de Tempo de entrega</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Entregador</th>                        
+                        <th>Pedidos</th>
+                        <th>Qtde</th>
+                        <th>Valor</th>
+                        <th>Taxa</th>
+                        <th>Total</th>
+                        <th>TCM</th>
+                        <th>Part (%)</th>
+                        <th>Med TMP </th>                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in venda_entregador_metrics %}
+                    <tr>                                        
+                        <td>{{ item.entregador }}</td>
+                        <td>{{ item.pedidos }}</td>
+                        <td>{{ item.produtos }}</td>
+                        <td>R$ {{ item.vlr_produtos|floatformat:2 }}</td>
+                        <td>R$ {{ item.entrega|floatformat:2 }}</td>
+                        <td>R$ {{ item.valor|floatformat:2 }}</td>
+                        <td>R$ {{ item.tcm|floatformat:2 }}</td>
+                        <td>{{ item.participacao|floatformat:2 }}</td>
+                        <td>{{ item.media_tempo_entrega }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center">Nenhum pedido encontrado para o período selecionado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    DBDASH - Home
+{% endblock %}
+
+{% block content %}
+
+  {% include 'components/_dash_ano_mes.html' %}
+
+  {% if perms.outflows.view_outflow %}
+    {% include 'components/_sales_metrics.html' %}        
+    {% include 'components/_origin_metrics.html' %}    
+    {% include 'components/_tax_metrics.html' %}    
+    {% include 'components/_kpisalles_metrics.html' %}            
+    {% include 'components/_services_metrics.html' %}        
+    {% include 'components/_groups_metrics.html' %}  
+    {% include 'components/_combosalles_metrics.html' %}      
+    {% include 'components/_desctsalles_metrics.html' %}          
+    {% include 'components/_kpidel_metrics.html' %}        
+    {% include 'components/_delneighborhoods_metrics.html' %}            
+    {% include 'components/_deliveryman_metrics.html' %}        
+    {% include 'components/_attendant_metrics.html' %}        
+    {% include 'components/_payments_metrics.html' %}        
+    {% include 'components/_cashcheck_metrics.html' %}           
+    {% include 'components/_boxmoviment_metrics.html' %}               
+    {% include 'components/_receivables_metrics.html' %}     
+    {% include 'components/_financialflow_metrics.html' %}             
+    {% include 'components/_taxcalculation_metrics.html' %}       
+
+    {% include 'components/_demflxpro_metrics.html' %}       
+
+  {% endif %}
+
+{% endblock %}

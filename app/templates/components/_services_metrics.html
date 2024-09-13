@@ -1,0 +1,52 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Atendimentos / Taxa Servico</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Atendente</th>
+                        <th>Itens</th>
+                        <th>Qtde</th>
+                        <th>Valor </th>
+                        <th>TCMI</th>
+                        <th>Total TS</th>
+                        <th>TS Casa</th>
+                        <th>TS Labor</th>
+                        <th>TS Sind</th>
+                        <th>TS Prod</th>
+                        <th>TS Atd</th>
+                        <th>Pri Lcto</th>
+                        <th>Últ Lcto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for atendimento in pedidos_atendimentos %}
+                    <tr>
+                        <td>{{ atendimento.atendente }}</td>
+                        <td>{{ atendimento.tcs|floatformat:0 }}</td>
+                        <td>{{ atendimento.qtde|floatformat:2 }}</td>
+                        <td>{{ atendimento.vlr_bruto|floatformat:2 }}</td>
+                        <td>{{ atendimento.tcmi|floatformat:2 }}</td>
+                        <td>{{ atendimento.ts_total|floatformat:2 }}</td>
+                        <td>{{ atendimento.ts_casa|floatformat:2 }}</td>
+                        <td>{{ atendimento.ts_laboral|floatformat:2 }}</td>
+                        <td>{{ atendimento.ts_sindicato|floatformat:2 }}</td>
+                        <td>{{ atendimento.ts_producao|floatformat:2 }}</td>
+                        <td>{{ atendimento.ts_atendimento|floatformat:2 }}</td>
+                        <td>{{ atendimento.pri_lcto }}</td>
+                        <td>{{ atendimento.ult_lcto }}</td>
+                    
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="15">Nenhum dado encontrado.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
