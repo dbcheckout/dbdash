@@ -12,3 +12,9 @@ uwsgi_param  REMOTE_ADDR        $remote_addr;
 uwsgi_param  REMOTE_PORT        $remote_port;
 uwsgi_param  SERVER_PORT        $server_port;
 uwsgi_param  SERVER_NAME        $server_name;
+
+#uwsgi --socket /www/wwwroot/dbdash/dbdash.sock --module app.wsgi --chmod-socket=666
+
+#include /www/server/panel/vhost/nginx/*.conf;
+
+#sudo ln -s /etc/nginx/sites-available/dbdash.conf /etc/nginx/sites-enabled/
