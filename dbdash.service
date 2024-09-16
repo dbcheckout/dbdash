@@ -1,0 +1,12 @@
+[Unit]
+Description=uWSGI instance to serve DBDASH
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/www/wwwroot/dbdash/
+ExecStart=/www/wwwroot/dbdash/venv/bin/uwsgi --ini /www/wwwroot/dbdash/dbdash_uwsgi.ini
+
+[Install]
+WantedBy=multi-user.target
