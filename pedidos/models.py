@@ -17,6 +17,7 @@ class Combo(models.Model):
         unique_together = ('numero', 'loja')
         verbose_name = 'Combo'
         verbose_name_plural = 'Combos'
+        managed = False  # Django não gerenciará esta tabela        
 
 
 class Desconto(models.Model):
@@ -36,7 +37,7 @@ class Desconto(models.Model):
 
     class Meta:
         db_table = 'descontos'
-        managed = True        
+        managed = False        
 
 
 
@@ -77,6 +78,7 @@ class Formas_Pagamento(models.Model):
         db_table = 'formas_pgtos'
         verbose_name = 'Pagamento'
         verbose_name_plural = 'Pagamentos'
+        managed = False               
 
 
 
@@ -138,15 +140,15 @@ class Pedidos(models.Model):
     hora_expedicao           = models.DateTimeField()    
     hora_baixa               = models.DateTimeField()    
 
-
-
-class Meta:
-    db_table = 'pedidos'   
-    verbose_name = 'pedidos'
-    verbose_name_plural = 'movimento'       
+    class Meta:
+        db_table = 'pedidos'   
+        verbose_name = 'pedidos'
+        verbose_name_plural = 'movimento'     
+        managed = False  
+            
 
     def __str__(self):
-        return str(self.product)
+        return str(self.numero)
     
 
 class Itens(models.Model):    
@@ -189,12 +191,11 @@ class Itens(models.Model):
     codigo_combo          = models.ForeignKey(Combo, on_delete=models.CASCADE,db_column='codigo_combo')
     codigo_desconto       = models.ForeignKey(Desconto, on_delete=models.CASCADE, db_column='codigo_desconto', null=True, blank=True)
    
-
-class Meta:
-    db_table     = 'pedidos_itens'   
-    verbose_name = 'itens'
-    verbose_name_plural = 'movimento_itens'       
-
+    class Meta:
+        db_table     = 'pedidos_itens'   
+        verbose_name = 'itens'
+        verbose_name_plural = 'movimento_itens'    
+        managed = False       
 
     def __str__(self):
         return f'{self.produto.CODIGO} - {self.qtd}'
@@ -245,6 +246,7 @@ class Pagamentos(models.Model):
         unique_together = (('sequencia', 'pedido'),)
         verbose_name = 'Pedido Pagamento'
         verbose_name_plural = 'Pedidos Pagamentos'
+        managed = False        
 
 
 
@@ -430,6 +432,7 @@ class Movimento(models.Model):
     class Meta:
         db_table = 'movimento'
         unique_together = (('numero', 'caixa_numero', 'data', 'caixa_cpu', 'origem'),)
+        managed = False  # Django não gerenciará esta tabela
 
 
 
@@ -456,3 +459,4 @@ class FluxoProdutoReceita(models.Model):
         db_table = 'dem_fluxo_produto_receita'
         verbose_name = 'Fluxo Produto Receita'
         verbose_name_plural = 'Fluxo Produtos Receitas'
+        managed = False  # Django não gerenciará esta tabela        

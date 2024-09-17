@@ -7,6 +7,9 @@ class Grupos(models.Model):
     loja     = models.IntegerField()          
 
     class Meta:
+        db_table = 'produto_grupos'        
+        managed = False  # Django não gerenciará esta tabela                
+
         ordering = ['grupo']
 
     def __str__(self):
@@ -32,6 +35,8 @@ class Tamanhos(models.Model):
     tamanho  = models.CharField(max_length=30)
         
     class Meta:
+        db_table = 'produto_tamanhos'        
+        managed = False  # Django não gerenciará esta tabela                
         ordering = ['tamanho']
 
     def __str__(self):
@@ -60,6 +65,7 @@ class Produtos(models.Model):
         db_table = 'produtos'
         verbose_name = 'produtos'
         verbose_name_plural = 'produtos'
+        managed = False  # Django não gerenciará esta tabela        
 
         
 
@@ -85,9 +91,8 @@ class Receitas(models.Model):
     class Meta:
         db_table = 'produtos_receitas'
         verbose_name = 'produtos_receitas'
+        managed = False  # Django não gerenciará esta tabela        
         
-
-
     def __str__(self):
         return self.apelido
 
