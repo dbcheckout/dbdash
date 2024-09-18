@@ -7,21 +7,19 @@
       </button>
       <div class="collapse d-sm-block" id="menuCollapse">
         <ul class="nav flex-column align-items-start" id="menu">
-          <li>
-            <a href="{% url 'home' %}" class="nav-link px-0 align-middle">
-              <i class="bi bi-speedometer2 fs-4"></i>
-              <span class="ms-1">Dashboard</span>
-            </a>
-          </li>
+
 
         {% if perms.produtos.view_produto %}    
+
           <li>
-            <a href="{% url 'am_produto_list' %}" class="nav-link px-0 align-middle">
-              <i class="bi bi-box-seam fs-4"></i>
-              <span class="ms-1">AM Produtos</span>
-            </a>
-          </li>          
-        {% endif %}      
+            {% include 'components/_dash_ano_mes.html' %}
+          </li>  
+          
+          
+        {% endif %}   
+        
+
+       
         
           
           <li class="nav-item">

@@ -6,8 +6,6 @@
 
 {% block content %}
 
-  {% include 'components/_dash_ano_mes.html' %}
-
   {% if perms.outflows.view_outflow %}
     {% include 'components/_sales_metrics.html' %}        
     {% include 'components/_origin_metrics.html' %}    
