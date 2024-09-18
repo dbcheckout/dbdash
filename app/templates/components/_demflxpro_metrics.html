@@ -7,25 +7,25 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Código do Ingrediente</th>
-                        <th>Descrição</th>
-                        <th>Custo Real</th>                        
-                        <th>Consumo</th>
-                        <th>Valor</th>
+                        <th>Grupo</th>
+                        <th>Tipo</th>
+                        <th>Custo Unitário (por unidade)</th>
+                        <th>Quantidade Consumida</th>
+                        <th>Valor Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in dem_fluxoproduto_metrics %}
                     <tr>
-                        <td>{{ item.produto_codigo }}</td>
-                        <td>{{ item.ingrediente_codigo }}</td>
-                        <td>{{ item.ingrediente_qtd|floatformat:2 }}</td>
-                        <td>{{ item.custo|floatformat:4 }}</td>
-                        <td>{{ item.custo|floatformat:2 }}</td>
+                        <td>{{ item.grupo_nome }}</td>
+                        <td>{{ item.tipo_nome }}</td>
+                        <td>{{ item.custo_unitario|floatformat:2 }}</td>
+                        <td>{{ item.total_qtd|floatformat:2 }}</td>
+                        <td>{{ item.total_custo|floatformat:2 }}</td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6" class="text-center">Nenhum dado encontrado para o período selecionado.</td>
+                        <td colspan="5" class="text-center">Nenhum dado encontrado para o período selecionado.</td>
                     </tr>
                     {% endfor %}
                 </tbody>

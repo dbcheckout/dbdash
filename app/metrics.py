@@ -1109,17 +1109,37 @@ def get_venda_desconto(data_inicial, data_final):
     return descontos_summary
 
 
-def get_fluxo_produto_receita(data_inicial, data_final):
-    resultado = (FluxoProdutoReceita.objects
-                 .filter(data__gte=data_inicial, data__lte=data_final)
-                 .values(
-                     'produto_codigo',  # `produto_produtos`.`codigo`
-                     'ingrediente_codigo',  # `produto_produtos`.`DESCRICAO`
-                 )
-                 .annotate(
-                     consumo = Sum('ingrediente_qtd'),  # SUM(`dem_fluxo_produto_receita`.`ingrediente_qtd`) AS CONSUMO
-                     valor   = Sum(F('custo') , output_field=DecimalField()) 
-                 )
-                 .order_by('ingrediente_codigo'))
 
-    return resultado
+
+
+def get_fluxo_produto_receita(data_inicial, data_final):
+    return (FluxoProdutoReceita.objects
+        .filter(data__gte=data_inicial, data__lte=data_final)
+        .select_related('ingrediente_codigo')  # Inclui os campos do modelo relacionado
+        .values(
+            'ingrediente_codigo__grupo',  # Inclui o grupo para agrupamento
+            'ingrediente_codigo__tipo',   # Inclui o tipo para agrupamento            
+            'custo',
+        )
+        .annotate(
+            grupo_nome=F('ingrediente_codigo__grupo__grupo'),  # Nome do grupo
+            tipo_nome=F('ingrediente_codigo__tipo__tipo'),  # Nome do tipo
+            custo_unitario=F('custo'),  # Custo unitário do ingrediente
+            custo_total=ExpressionWrapper(
+                F('ingrediente_qtd') * F('custo'),
+                output_field=DecimalField()  # Especifique o tipo de campo do resultado da multiplicação
+            )
+        )
+        .values(
+            'ingrediente_codigo__grupo',  # Inclui o grupo para agrupamento
+            'grupo_nome',  # Nome do grupo
+            'ingrediente_codigo__tipo',   # Inclui o tipo para agrupamento
+            'tipo_nome',  # Nome do tipo
+            'custo_unitario',  # Custo unitário
+            total_qtd=Sum('ingrediente_qtd'),  # Total de quantidade
+            total_custo=Sum('custo_total')  # Total de custo
+        )
+        .order_by(
+            'ingrediente_codigo__grupo',  # Ordenar pelo grupo do ingrediente
+            'ingrediente_codigo__tipo'    # Ordenar pelo tipo do ingrediente
+        ))

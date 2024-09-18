@@ -152,7 +152,7 @@ class Pedidos(models.Model):
     
 
 class Itens(models.Model):    
-    pedido        = models.ForeignKey(Pedidos, on_delete=models.CASCADE, related_name='itens_pedido', db_column='pedido', primary_key=True)
+    pedido        = models.ForeignKey(Pedidos, on_delete=models.CASCADE, related_name='itens_pedido', db_column='pedido', primary_key=True,unique=True)    
     data          = models.DateTimeField()
     loja          = models.IntegerField(null=True, blank=True)    
     atendente     = models.CharField(max_length=20)
