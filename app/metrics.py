@@ -118,7 +118,15 @@ def get_pedidos_metrics(data_inicial, data_final):
     )
 
 
-def get_pedidos_ori_metrics(data_inicial=None, data_final=None,origem=None):    
+def get_pedidos_ori_metrics(data_inicial=None, data_final=None,origem=None):   
+
+    # Extraindo as informações do resumo
+    resumo = get_resumo_pedidos(data_inicial, data_final)    
+    qtd_pedidos          = resumo.get('qtd_pedidos', 0)
+    dias_operados        = resumo.get('dias_operados', 1)  # Evitar divisão por zero
+    valor_total_subtotal = resumo.get('valor_total_subtotal', 0)    
+    valor_total_icms     = resumo.get('valor_total_icms', 0)    
+
     # Inicializa variáveis
     dbc_tcs = 0 
     dbc_vlr_ped = 0.0
@@ -127,6 +135,22 @@ def get_pedidos_ori_metrics(data_inicial=None, data_final=None,origem=None):
     dbc_vlr_ts = 0.0
     dbc_vlr_tax = 0.0
     dbc_vlr_cus = 0.0
+    dbc_vlr_cus = 0.0
+    dbc_vnd_dia = 0.0
+    dbc_par = 0.0
+    dbc_icms = 0.0
+    dbc_icms_par = 0.0
+    dbc_icms_ali = 0.0 
+    dbc_bas_st = 0.0    
+    dbc_bas_red = 0.0    
+    dbc_bas_tri = 0.0    
+    dbc_bas_ae = 0.0
+    dbc_nfce = 0.0    
+
+    # Extraindo as informações do nfce
+    resumo_nfce = get_resumo_nfce(data_inicial, data_final,origem)
+    dbc_nfce = resumo_nfce.get('valor_nfce_subtotal', 0)        
+
 
     # Filtra os pedidos com base nas datas, se fornecidas
     pedidos_query = Pedidos.objects.filter(
@@ -158,9 +182,31 @@ def get_pedidos_ori_metrics(data_inicial=None, data_final=None,origem=None):
         if pedido.custo is not None:
             dbc_vlr_cus += pedido.custo
 
+        if pedido.custo is not None:
+            dbc_vlr_cus += pedido.custo
+
+        if pedido.apura_icms is not None:            
+            dbc_icms += pedido.apura_icms
+
+        if pedido.imposto_base_substituida is not None:
+            dbc_bas_st += pedido.imposto_base_substituida
+
+        if pedido.imposto_base_reducao is not None:
+            dbc_bas_red += pedido.imposto_base_reducao
+
+        if pedido.imposto_base_tributada is not None:
+            dbc_bas_tri += pedido.imposto_base_tributada
+
+
+
     # Previne divisão por zero
-    dbc_tcm = dbc_vlr_pro / dbc_tcs if dbc_tcs > 0 else 0
-    dbc_vlr_tax = dbc_vlr_te + dbc_vlr_ts
+    dbc_tcm       = dbc_vlr_pro / dbc_tcs if dbc_tcs > 0 else 0
+    dbc_vlr_tax   = dbc_vlr_te + dbc_vlr_ts
+    dbc_par       = (dbc_vlr_pro * 100) / valor_total_subtotal if valor_total_subtotal > 0 else 0
+    dbc_vnd_dia   = dbc_vlr_pro / dias_operados if dias_operados > 0 else 0
+    dbc_icms_par  = (dbc_icms * 100) / valor_total_icms if valor_total_icms > 0 else 0
+    dbc_bas_ae    = dbc_vlr_pro - dbc_bas_st
+    dbc_icms_ali  = (dbc_icms * 100) / dbc_bas_ae if dbc_bas_tri > 0 else 0
 
     return dict(
         dbc_tcs=dbc_tcs,
@@ -171,6 +217,15 @@ def get_pedidos_ori_metrics(data_inicial=None, data_final=None,origem=None):
         dbc_vlr_ts=number_format(dbc_vlr_ts, decimal_pos=2, force_grouping=True),
         dbc_vlr_cus=number_format(dbc_vlr_cus, decimal_pos=2, force_grouping=True),
         dbc_tcm=number_format(dbc_tcm, decimal_pos=2, force_grouping=True),
+        dbc_par=number_format(dbc_par, decimal_pos=2, force_grouping=True),        
+        dbc_vnd_dia=number_format(dbc_vnd_dia, decimal_pos=2, force_grouping=True),        
+        dbc_icms=number_format(dbc_icms, decimal_pos=2, force_grouping=True),        
+        dbc_icms_par=number_format(dbc_icms_par, decimal_pos=2, force_grouping=True),        
+        dbc_icms_ali=number_format(dbc_icms_ali, decimal_pos=2, force_grouping=True),                
+        dbc_bas_st=number_format(dbc_bas_st, decimal_pos=2, force_grouping=True),                        
+        dbc_bas_red=number_format(dbc_bas_red, decimal_pos=2, force_grouping=True),                                
+        dbc_bas_tri=number_format(dbc_bas_tri, decimal_pos=2, force_grouping=True),                                        
+        dbc_nfce=number_format(dbc_nfce, decimal_pos=2, force_grouping=True),                                        
     )
 
 
@@ -249,7 +304,8 @@ def get_resumo_pedidos(data_inicial=None, data_final=None):
         valor_total_subtotal=Sum('sub_total') ,
         media_pedidos_por_dia=Avg('sub_total'),
         media_subtotal_por_pedido=Avg('sub_total'),       
-        valor_total_pedidos=Sum('vlr_pedido')
+        valor_total_pedidos=Sum('vlr_pedido'),
+        valor_total_icms=Sum('apura_icms')
     )
 
     # Calculando a média de pedidos por dia
@@ -262,6 +318,31 @@ def get_resumo_pedidos(data_inicial=None, data_final=None):
     resumo['media_pedidos_por_dia'] = media_pedidos_por_dia
 
     return resumo
+
+def get_resumo_nfce(data_inicial=None, data_final=None,origem=None):
+    # Filtrando os pedidos dentro do intervalo de datas
+    pedidos = Pedidos.objects.filter(
+        data__gte=data_inicial,
+        data__lte=data_final,
+        nfce_status_cod=100,        
+        estagio='baixado',  # Assumindo que o estágio relevante é 'baixado'
+        status='encerrado'  # Assumindo que o status relevante é 'encerrado'
+    )
+    
+    # Se a origem for fornecida, adiciona o filtro de origem
+    if origem:
+        pedidos = pedidos.filter(origem=origem)
+    
+    # Calculando a quantidade de pedidos, a quantidade de dias operados e o valor total de sub_total
+    resumo = pedidos.aggregate(
+        qtd_nfce=Count('numero'),        
+        valor_nfce_subtotal =Sum('sub_total'),
+        valor_nfce_total    =Sum('vlr_pedido'),
+        valor_nfce_icms     =Sum('apura_icms')
+    )
+
+    return resumo
+
 
 
 def get_consulta_vendas_grupo(data_inicial=None, data_final=None):
@@ -423,6 +504,7 @@ def get_apuracao_caixa(data_inicial, data_final):
         'total_quebra': total_quebra,
         'saldo_quebra': saldo_quebra
     }
+
 
 def get_apuracao_icms(data_inicial, data_final):
     # Filtra os pedidos e pedidos_itens conforme as condições
@@ -1109,37 +1191,26 @@ def get_venda_desconto(data_inicial, data_final):
     return descontos_summary
 
 
-
-
-
 def get_fluxo_produto_receita(data_inicial, data_final):
-    return (FluxoProdutoReceita.objects
+    return (
+        FluxoProdutoReceita.objects
         .filter(data__gte=data_inicial, data__lte=data_final)
         .select_related('ingrediente_codigo')  # Inclui os campos do modelo relacionado
         .values(
             'ingrediente_codigo__grupo',  # Inclui o grupo para agrupamento
-            'ingrediente_codigo__tipo',   # Inclui o tipo para agrupamento            
-            'custo',
+            'ingrediente_codigo__tipo',   # Inclui o tipo para agrupamento
         )
         .annotate(
             grupo_nome=F('ingrediente_codigo__grupo__grupo'),  # Nome do grupo
             tipo_nome=F('ingrediente_codigo__tipo__tipo'),  # Nome do tipo
-            custo_unitario=F('custo'),  # Custo unitário do ingrediente
-            custo_total=ExpressionWrapper(
-                F('ingrediente_qtd') * F('custo'),
-                output_field=DecimalField()  # Especifique o tipo de campo do resultado da multiplicação
-            )
-        )
-        .values(
-            'ingrediente_codigo__grupo',  # Inclui o grupo para agrupamento
-            'grupo_nome',  # Nome do grupo
-            'ingrediente_codigo__tipo',   # Inclui o tipo para agrupamento
-            'tipo_nome',  # Nome do tipo
-            'custo_unitario',  # Custo unitário
+            custo_unitario=Avg('custo'),  # Custo unitário do ingrediente
             total_qtd=Sum('ingrediente_qtd'),  # Total de quantidade
-            total_custo=Sum('custo_total')  # Total de custo
+            custo_total=Sum(
+                ExpressionWrapper(F('ingrediente_qtd') * F('custo'), output_field=DecimalField())
+            ),  # Total de custo
         )
         .order_by(
             'ingrediente_codigo__grupo',  # Ordenar pelo grupo do ingrediente
             'ingrediente_codigo__tipo'    # Ordenar pelo tipo do ingrediente
-        ))
+        )
+    )

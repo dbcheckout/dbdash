@@ -9,7 +9,7 @@
                     <tr>
                         <th>Grupo</th>
                         <th>Tipo</th>
-                        <th>Custo Unitário (por unidade)</th>
+                        <th>Media Custo Unit</th>
                         <th>Quantidade Consumida</th>
                         <th>Valor Total</th>
                     </tr>
@@ -21,7 +21,7 @@
                         <td>{{ item.tipo_nome }}</td>
                         <td>{{ item.custo_unitario|floatformat:2 }}</td>
                         <td>{{ item.total_qtd|floatformat:2 }}</td>
-                        <td>{{ item.total_custo|floatformat:2 }}</td>
+                        <td>{{ item.custo_total|floatformat:2 }}</td>
                     </tr>
                     {% empty %}
                     <tr>
